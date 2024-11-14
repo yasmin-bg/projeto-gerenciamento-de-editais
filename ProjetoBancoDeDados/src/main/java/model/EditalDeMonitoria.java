@@ -10,7 +10,7 @@ public class EditalDeMonitoria {
 
 	private LocalDateTime dataInicio;
 	private LocalDateTime dataFinal;
-	private ArrayList<Vaga> vagas = new ArrayList<Vaga>();
+	private ArrayList<Disciplina> disciplinas = new ArrayList<Disciplina>();
 	
 	public long getId() {
 		return id;
@@ -39,11 +39,11 @@ public class EditalDeMonitoria {
 		this.dataFinal = dataFinal;
 	}
 
-	public ArrayList<Vaga> getVagas() {
-		return vagas;
+	public ArrayList<Disciplina> getDisciplinas() {
+		return disciplinas;
 	}
-	public void setVagas(ArrayList<Vaga> vagas) {
-		this.vagas = vagas;
+	public void setDisciplinas(ArrayList<Disciplina> disciplinas) {
+		this.disciplinas = disciplinas;
 
 	}
 	
@@ -55,11 +55,11 @@ public class EditalDeMonitoria {
 		return LocalDateTime.now().isAfter(dataInicio);
 	}
 	
-	public boolean inscrever(Aluno aluno, String disciplina) {
+	public boolean inscrever(Aluno aluno, String nomeDisciplina) {
 		if (!jaAcabou() && jaComecou()) {
-			for (Vaga vaga: vagas) {
-				if (vaga.getDisciplina().equalsIgnoreCase(disciplina)) {
-					vaga.getListaDeAlunosInscritos().add(aluno);
+			for (Disciplina disciplina: disciplinas) {
+				if (disciplina.getNome().equalsIgnoreCase(nomeDisciplina)) {
+					disciplina.getListaDeAlunosInscritos().add(aluno);
 					return true;
 				}
 			}
@@ -81,8 +81,8 @@ public class EditalDeMonitoria {
 	public String toString() {
 		
 		String infoVagas = "";
-		for (Vaga vaga: vagas) {
-			infoVagas += vaga.getDisciplina()+" - "+vaga.getQuantidadeDeVagas()+" vagas\n";
+		for (Disciplina disciplina: disciplinas) {
+			infoVagas += disciplina.getNome()+" - "+disciplina.getQuantidadeDeVagas()+" vagas\n";
 		}
 		
 		String status;

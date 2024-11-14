@@ -1,19 +1,26 @@
-package dto;
+package model;
 
 import java.util.ArrayList;
 
-import model.Aluno;
-
-public class DiscilplinaDTO {
+public class Disciplina {
 	
 	private String nome;
 	private int quantidadeDeVagas;
 	private ArrayList<Aluno> listaDeAlunosInscritos = new ArrayList<Aluno>();
 
-	public String getDisciplina() {
+	public Disciplina() {
+	}
+
+	public Disciplina(String nome, int quantidadeDeVagas, ArrayList<Aluno> listaDeAlunosInscritos) {
+		this.nome = nome;
+		this.quantidadeDeVagas = quantidadeDeVagas;
+		this.listaDeAlunosInscritos = listaDeAlunosInscritos;
+	}
+	
+	public String getNome() {
 		return nome;
 	}
-	public void setDisciplina(String nome) {
+	public void setNome(String nome) {
 		this.nome = nome;
 	}
 	

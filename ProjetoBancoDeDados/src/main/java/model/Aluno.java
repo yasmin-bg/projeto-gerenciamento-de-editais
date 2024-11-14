@@ -12,6 +12,10 @@ public class Aluno {
 	        this.email = email;
 	        this.senha = senha;
 	}
+		
+	public Aluno() {
+	}
+
 	public String getNome() {
 		return nome;
 	}

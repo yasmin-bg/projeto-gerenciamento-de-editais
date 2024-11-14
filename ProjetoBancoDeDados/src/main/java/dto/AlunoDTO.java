@@ -12,6 +12,10 @@ public class AlunoDTO {
 	        this.email = email;
 	        this.senha = senha;
 	}
+	
+	public AlunoDTO() {
+	}
+
 	public String getNome() {
 		return nome;
 	}
