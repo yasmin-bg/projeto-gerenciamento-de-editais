@@ -2,15 +2,30 @@ package model;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+
+@Entity
 public class EditalDeMonitoria {
-	
-	private long id;
-	private String numero;
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+    
+    private String numero;
 
-	private LocalDateTime dataInicio;
-	private LocalDateTime dataFinal;
-	private ArrayList<Disciplina> disciplinas = new ArrayList<Disciplina>();
+    private LocalDateTime dataInicio;
+    private LocalDateTime dataFinal;
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    
+    private List<Disciplina> disciplinas = new ArrayList<>();
 	
 	public long getId() {
 		return id;
