@@ -1,16 +1,24 @@
 package model;
 
+import javax.persistence.*;
+import dto.AlunoDTO;
+import dto.DisciplinaDTO;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 
+@Entity
 public class EditalDeMonitoria {
-	
-	private long id;
-	private String numero;
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id; 
+    private String numero;
+    private LocalDateTime dataInicio;
+    private LocalDateTime dataFinal;
 
-	private LocalDateTime dataInicio;
-	private LocalDateTime dataFinal;
-	private ArrayList<Disciplina> disciplinas = new ArrayList<Disciplina>();
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    private ArrayList<DisciplinaDTO> disciplinas = new ArrayList<>();
 	
 	public long getId() {
 		return id;
@@ -55,11 +63,11 @@ public class EditalDeMonitoria {
 		return LocalDateTime.now().isAfter(dataInicio);
 	}
 	
-	public boolean inscrever(Aluno aluno, String nomeDisciplina) {
+	public boolean inscrever(AlunoDTO aluno, String nomeDisciplina) {
 		if (!jaAcabou() && jaComecou()) {
-			for (Disciplina disciplina: disciplinas) {
+			for (DisciplinaDTO disciplina: disciplinas) {
 				if (disciplina.getNome().equalsIgnoreCase(nomeDisciplina)) {
-					disciplina.getListaDeAlunosInscritos().add(aluno);
+					disciplina.getListaDeAlunosInscritos().add(null);
 					return true;
 				}
 			}
