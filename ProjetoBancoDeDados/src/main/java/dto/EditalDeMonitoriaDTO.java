@@ -57,5 +57,4 @@ public class EditalDeMonitoriaDTO {
 		this.disciplinas = disciplinas;
 
 	}
-
 }

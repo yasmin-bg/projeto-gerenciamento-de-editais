@@ -1,7 +1,6 @@
 package dao;
 
-import model.EditalDeMonitoria;
-
+import dto.EditalDeMonitoriaDTO;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -12,7 +11,7 @@ public class EditalDeMonitoriaDAO {
 
     private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("editais-monitoria");
 
-    public EditalDeMonitoria salvar(EditalDeMonitoria edital) {
+    public EditalDeMonitoriaDTO salvar(EditalDeMonitoriaDTO edital) {
         EntityManager em = emf.createEntityManager();
         try {
             em.getTransaction().begin();
@@ -31,10 +30,10 @@ public class EditalDeMonitoriaDAO {
         }
     }
 
-    public EditalDeMonitoria buscarPorId(long id) {
+    public EditalDeMonitoriaDTO buscarPorId(long id) {
         EntityManager em = emf.createEntityManager();
         try {
-            return em.find(EditalDeMonitoria.class, id);
+            return em.find(EditalDeMonitoriaDTO.class, id);
         } catch (Exception e) {
             throw new RuntimeException("Erro ao buscar edital: " + e.getMessage(), e);
         } finally {
@@ -42,11 +41,11 @@ public class EditalDeMonitoriaDAO {
         }
     }
 
-    public List<EditalDeMonitoria> listarTodos() {
+    public List<EditalDeMonitoriaDTO> listarTodos() {
         EntityManager em = emf.createEntityManager();
         try {
-            TypedQuery<EditalDeMonitoria> query = em.createQuery(
-                "SELECT e FROM EditalDeMonitoria e", EditalDeMonitoria.class
+            TypedQuery<EditalDeMonitoriaDTO> query = em.createQuery(
+                "SELECT e FROM EditalDeMonitoria e", EditalDeMonitoriaDTO.class
             );
             return query.getResultList();
         } catch (Exception e) {
@@ -60,7 +59,7 @@ public class EditalDeMonitoriaDAO {
         EntityManager em = emf.createEntityManager();
         try {
             em.getTransaction().begin();
-            EditalDeMonitoria edital = em.find(EditalDeMonitoria.class, id);
+            EditalDeMonitoriaDTO edital = em.find(EditalDeMonitoriaDTO.class, id);
             if (edital != null) {
                 em.remove(edital);
             }
