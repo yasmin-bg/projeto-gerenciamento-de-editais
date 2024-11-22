@@ -1,6 +1,8 @@
 package model;
 
 import javax.persistence.*;
+import dto.AlunoDTO;
+import dto.DisciplinaDTO;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,15 +12,13 @@ public class EditalDeMonitoria {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
-    
+    private long id; 
     private String numero;
-
     private LocalDateTime dataInicio;
     private LocalDateTime dataFinal;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Disciplina> disciplinas = new ArrayList<>();
+    private ArrayList<DisciplinaDTO> disciplinas = new ArrayList<>();
 	
 	public long getId() {
 		return id;
@@ -63,11 +63,11 @@ public class EditalDeMonitoria {
 		return LocalDateTime.now().isAfter(dataInicio);
 	}
 	
-	public boolean inscrever(Aluno aluno, String nomeDisciplina) {
+	public boolean inscrever(AlunoDTO aluno, String nomeDisciplina) {
 		if (!jaAcabou() && jaComecou()) {
-			for (Disciplina disciplina: disciplinas) {
+			for (DisciplinaDTO disciplina: disciplinas) {
 				if (disciplina.getNome().equalsIgnoreCase(nomeDisciplina)) {
-					disciplina.getListaDeAlunosInscritos().add(aluno);
+					disciplina.getListaDeAlunosInscritos().add(null);
 					return true;
 				}
 			}
