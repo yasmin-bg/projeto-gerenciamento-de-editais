@@ -1,9 +1,25 @@
 package model;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name= "ALUNOS_CADASTRADOS")
+
 public class Aluno {
+	@Column(nullable=false)
 	private String nome;
+	
+	@Id
+	@Column(nullable=false,unique = true)
 	private String matricula;
+	
+	@Column(nullable=false)
 	private String email;
+	
+	@Column(nullable=false)
 	private String senha;
 	
 	public Aluno(String nome, String matricula, String email, String senha) {
@@ -12,7 +28,6 @@ public class Aluno {
 	        this.email = email;
 	        this.senha = senha;
 	}
-		
 	public Aluno() {
 	}
 
