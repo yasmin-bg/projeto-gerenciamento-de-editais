@@ -1,7 +1,13 @@
 package controller;
 
 import dao.EditalDeMonitoriaDAO;
+import dto.AlunoDTO;
+import dto.DisciplinaDTO;
 import dto.EditalDeMonitoriaDTO;
+import mappers.MapperEditalDeMonitoria;
+import model.EditalDeMonitoria;
+
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class EditalDeMonitoriaController {
@@ -11,15 +17,30 @@ public class EditalDeMonitoriaController {
     public EditalDeMonitoriaController() {
         this.editalDeMonitoriaDAO = new EditalDeMonitoriaDAO();
     }
-
+    
     public boolean criarEdital(EditalDeMonitoriaDTO edital) {
-        if (!edital.getDataInicio().isAfter(edital.getDataFinal())) {
-        	editalDeMonitoriaDAO.salvar(edital);
-        	return true;
-            
+    	if (!edital.getDataInicio().isAfter(edital.getDataFinal())) {
+    		editalDeMonitoriaDAO.salvar(edital);
+    		return true;
+    		
+    	}
+    	
+    	return false;  
+    }
+    
+    public boolean inscrever(EditalDeMonitoriaDTO editalDTO, AlunoDTO alunoDTO, DisciplinaDTO disciplinaDTO) {
+        MapperEditalDeMonitoria mapper = new MapperEditalDeMonitoria();
+
+        EditalDeMonitoria edital = mapper.fromDTO(editalDTO);
+
+        boolean inscrito = edital.inscrever(alunoDTO, disciplinaDTO);
+
+        if (inscrito) {
+            EditalDeMonitoriaDAO dao = new EditalDeMonitoriaDAO();
+            dao.atualizar(mapper.toDTO(edital));
         }
-        
-        return false;  
+
+        return inscrito;
     }
 
     public EditalDeMonitoriaDTO buscarEditalPorId(EditalDeMonitoriaDTO dto) {
