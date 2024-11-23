@@ -3,6 +3,8 @@ package model;
 import javax.persistence.*;
 import dto.AlunoDTO;
 import dto.DisciplinaDTO;
+import mappers.MapperAluno;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +21,11 @@ public class EditalDeMonitoria {
     private LocalDateTime dataFinal;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<DisciplinaDTO> disciplinas = new ArrayList<>();
+    private List<Disciplina> disciplinas = new ArrayList<>();
+    
+    public EditalDeMonitoria() {
+    	
+    }
 
     public long getId() {
         return id;
@@ -53,11 +59,11 @@ public class EditalDeMonitoria {
         this.dataFinal = dataFinal;
     }
 
-    public List<DisciplinaDTO> getDisciplinas() {
+    public List<Disciplina> getDisciplinas() {
         return disciplinas;
     }
 
-    public void setDisciplinas(List<DisciplinaDTO> disciplinas) {
+    public void setDisciplinas(List<Disciplina> disciplinas) {
         this.disciplinas = disciplinas;
     }
 
@@ -71,9 +77,10 @@ public class EditalDeMonitoria {
 
     public boolean inscrever(AlunoDTO aluno, DisciplinaDTO disciplinaDTO) {
         if (!jaAcabou() && jaComecou()) {
-            for (DisciplinaDTO disciplina : disciplinas) {
-                if (disciplina.equals(disciplinaDTO)) {
-                    disciplina.getListaDeAlunosInscritos().add(aluno);
+            for (Disciplina disciplina : disciplinas) {
+                if (disciplina.getNome().equals(disciplinaDTO.getNome())) {
+                	MapperAluno conversor = new MapperAluno();
+                    disciplina.getListaDeAlunosInscritos().add(conversor.fromDTO(aluno));
                     return true;
                 }
             }
@@ -90,7 +97,7 @@ public class EditalDeMonitoria {
     @Override
     public String toString() {
         StringBuilder infoVagas = new StringBuilder();
-        for (DisciplinaDTO disciplina : disciplinas) {
+        for (Disciplina disciplina : disciplinas) {
             infoVagas.append(disciplina.getNome()).append(" - ")
                      .append(disciplina.getQuantidadeDeVagas()).append(" vagas\n");
         }
