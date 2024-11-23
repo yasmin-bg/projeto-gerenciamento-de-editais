@@ -1,9 +1,7 @@
 package mappers;
 
-import dto.AlunoDTO;
 import dto.DisciplinaDTO;
 import dto.EditalDeMonitoriaDTO;
-import model.Aluno;
 import model.Disciplina;
 import model.EditalDeMonitoria;
 
