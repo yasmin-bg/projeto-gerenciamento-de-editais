@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 public class DisciplinaDTO {
 	
+	private long id;
 	private String nome;
 	private int quantidadeDeVagas;
 	private ArrayList<AlunoDTO> listaDeAlunosInscritos = new ArrayList<AlunoDTO>();
@@ -36,6 +37,14 @@ public class DisciplinaDTO {
 	}
 	public void setListaDeAlunosInscritos(ArrayList<AlunoDTO> listaDeAlunosInscritos) {
 		this.listaDeAlunosInscritos = listaDeAlunosInscritos;
+	}
+
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
 	}
 
 }
