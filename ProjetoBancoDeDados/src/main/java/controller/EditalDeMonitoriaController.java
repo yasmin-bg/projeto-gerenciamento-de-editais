@@ -12,15 +12,18 @@ public class EditalDeMonitoriaController {
         this.editalDeMonitoriaDAO = new EditalDeMonitoriaDAO();
     }
 
-    public EditalDeMonitoriaDTO criarEdital(EditalDeMonitoriaDTO edital) {
-        if (edital.getDataInicio().isAfter(edital.getDataFinal())) {
-            return null;
+    public boolean criarEdital(EditalDeMonitoriaDTO edital) {
+        if (!edital.getDataInicio().isAfter(edital.getDataFinal())) {
+        	editalDeMonitoriaDAO.salvar(edital);
+        	return true;
+            
         }
-        return editalDeMonitoriaDAO.salvar(edital);
+        
+        return false;  
     }
 
-    public EditalDeMonitoriaDTO buscarEditalPorId(long id) {
-        EditalDeMonitoriaDTO edital = editalDeMonitoriaDAO.buscarPorId(id);
+    public EditalDeMonitoriaDTO buscarEditalPorId(EditalDeMonitoriaDTO dto) {
+        EditalDeMonitoriaDTO edital = editalDeMonitoriaDAO.buscarPorId(dto);
         return edital;
     }
 
@@ -28,19 +31,22 @@ public class EditalDeMonitoriaController {
         return editalDeMonitoriaDAO.listarTodos();
     }
 
-    public EditalDeMonitoriaDTO atualizarEdital(EditalDeMonitoriaDTO edital) {
-        if (edital.getId() == 0 || edital.getDataInicio().isAfter(edital.getDataFinal())) {
-            return null; 
-        }
-        return editalDeMonitoriaDAO.salvar(edital);
-    }
-
-    public boolean deletarEdital(long id) {
-        EditalDeMonitoriaDTO edital = buscarEditalPorId(id);
-        if (edital != null) {
-            editalDeMonitoriaDAO.excluir(id);
+    public boolean atualizarEdital(EditalDeMonitoriaDTO edital) {
+        if (edital.getId() != 0 || !edital.getDataInicio().isAfter(edital.getDataFinal())) {
+        	editalDeMonitoriaDAO.atualizar(edital);
             return true;
         }
+        
+        return false;        
+    }
+
+    public boolean deletarEdital(EditalDeMonitoriaDTO dto) {
+        EditalDeMonitoriaDTO edital = buscarEditalPorId(dto);
+        if (edital != null) {
+            editalDeMonitoriaDAO.excluir(dto);
+            return true;
+        }
+        
         return false; 
     }
 
