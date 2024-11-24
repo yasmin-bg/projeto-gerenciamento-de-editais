@@ -16,10 +16,18 @@ import mappers.MapperAluno;
 import model.Aluno;
 
 public class AlunoDao implements IAlunoDao {
-    private EntityManagerFactory entityFactory = Persistence.createEntityManagerFactory("Alunos");
+    private EntityManagerFactory entityFactory = Persistence.createEntityManagerFactory("editais-monitoria");
     private MapperAluno conversor;
 
-	public AlunoDao() {
+	public AlunoDao(MapperAluno conversor) {
+		this.conversor=conversor;
+	}
+	public AlunoDao( ) {
+	}
+	public void fecharFactory() {
+        if (entityFactory.isOpen()) {
+        	entityFactory.close();
+        }
 	}
 	@Override
 	public void cadastrarAluno(AlunoDTO dto) throws AlunoJaCadastradoException {
@@ -41,27 +49,6 @@ public class AlunoDao implements IAlunoDao {
 	        entityManager.close();
 	    }
 	}
-
-	@Override
-	public void excluirAluno(AlunoDTO dto) throws AlunoNaoCadastradoException{
-	    EntityManager entityManager = entityFactory.createEntityManager();
-	    try {
-	        entityManager.getTransaction().begin();
-	        Aluno alunoExiste = entityManager.find(Aluno.class, dto.getMatricula());
-	        alunoExiste = conversor.fromDTO(dto);
-	        if (alunoExiste == null) {
-	        	throw new AlunoNaoCadastradoException();
-	        }
-        	entityManager.remove(alunoExiste);
-        	entityManager.getTransaction().commit();	
-	        
-	    } catch (Exception e) {
-	    	entityManager.getTransaction().rollback();
-	        throw e;
-	    } finally {
-	    	entityManager.close();
-	    }
-	  }	
 	@Override
 	public void editarAluno(AlunoDTO dto) throws Exception,AlunoNaoCadastradoException {
 	    EntityManager entityManager = entityFactory.createEntityManager();
@@ -119,3 +106,4 @@ public class AlunoDao implements IAlunoDao {
         }
   	}
 }
+	
