@@ -1,184 +1,134 @@
 package view;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Scanner;
 
+import dao.AlunoDao;
+import dto.AlunoDTO;
+import mappers.MapperAluno;
+import model.Aluno;
+
 public class MainAlunos {
-	
-	/* public static void main(String[] args) throws Exception {
-		Scanner leitor = new Scanner(System.in);
-		Persistencia persistencia = new Persistencia();
-		CentralDeInformacoes central = new CentralDeInformacoes();
+    public static void main(String[] args) {
+        Scanner leitor = new Scanner(System.in);
+        MapperAluno mapper = new MapperAluno(); // Inicializa o mapeador de DTO
+        AlunoDao alunoDao = new AlunoDao(mapper); // Inicializa o DAO
 
-		try {
-			central = persistencia.recuperarCentral("central.xml");
-		} catch (Exception e) {
-			System.out.println("Não foi possível recuperar as informações da central.");
-		}
+        System.out.println("Bem-vindo ao Sistema de Gestão de Alunos e Editais!");
 
+        while (true) {
+            System.out.println("\nEscolha uma opção:");
+            System.out.println("1 - Cadastrar novo aluno");
+            System.out.println("2 - Listar todos os alunos");
+            System.out.println("3 - Buscar aluno por matrícula");
+            System.out.println("4 - Editar informações de um aluno");
+            System.out.println("S - Sair");
 
-		while (true) {
-			System.out.println("Escolha uma opção:");
-			System.out.println("1 - Novo aluno");
-			System.out.println("2 - Listar todos os alunos:");
-			System.out.println("3 - Exibir informações de um aluno específico:");
-			System.out.println("4 - Novo Edital");
-			System.out.println("5 - Informar a quantidade de Editas cadastrados:");
-			System.out.println("6 - Detalhar um edital específico:");
-			System.out.println("7 - Inscrever Aluno em Edital:");
-			System.out.println("8 - Gerar comprovante de Inscrição ao edital:");
-			System.out.println("S - Sair");
-			
-			String escolha = leitor.nextLine().toLowerCase();
-			switch (escolha) {
-				case "1":
-					Sexo sexo;
-					String nome;
-					String sexoStr;
-					String matricula;
-					String email;
-					String senha;
-					System.out.print("Digite o nome do aluno: ");
-					nome = leitor.nextLine();
-					while (true) {
-						System.out.print("Digite o sexo do aluno: ");
-						sexoStr = leitor.nextLine();
-						if (sexoStr.equalsIgnoreCase("feminino")) {
-							sexo = Sexo.FEMININO;
-							break;
-						} else if (sexoStr.equalsIgnoreCase("masculino")) {
-							sexo = Sexo.MASCULINO;
-							break;
-						} else {
-							System.out.println("Por favor, digite novamente. O gênero deve ser 'feminino' ou 'masculino'.");
-						}
-					}
-					System.out.print("Digite a matricula do aluno: ");
-					matricula = leitor.nextLine();
-					System.out.print("Digite o email do aluno: ");
-					email = leitor.nextLine();
-					System.out.print("Digite a senha do email do aluno: ");
-					senha = leitor.nextLine();
-					Aluno aluno = new Aluno(nome, sexo, matricula, email, senha);
-					central.adicionarAluno(aluno);
-					persistencia.salvarCentral(central,"central.xml");
-					break;
-	
-				case "2":
-					central.listarTodosOsAlunos();
-					break;
-	
-				case "3":
-					System.out.print("Digite a matrícula do aluno que deseja ver as informações:");
-					matricula = leitor.nextLine();
-					aluno = central.recuperarAlunoPorMatricula(matricula);
-					if (aluno != null) {
-						System.out.println("Informações do aluno:");
-						System.out.println(aluno.toString());
-					} else {
-						System.out.println("Aluno não encontrado.");
-					}
-					break;
-	
-				case "4":
-					System.out.print("Digite o número do edital: ");
-					String numEdital=leitor.nextLine();
-	
-					System.out.print("Digite a data inicial do edital (dd/mm/aaaa): ");
-					String dataIncio = leitor.nextLine();
-					DateTimeFormatter parser = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-					LocalDateTime dataFormatadaInicio = LocalDate.parse(dataIncio,parser).atStartOfDay();
-	
-					System.out.print("Digite a data final do edital (dd/mm/aaaa): ");
-					String dataFinal = leitor.nextLine();
-					LocalDateTime dataFormatadaFinal = LocalDate.parse(dataFinal, parser).atStartOfDay();
-	
-					EditalDeMonitoria edital = new EditalDeMonitoria(numEdital, dataFormatadaInicio,dataFormatadaFinal);
-	
-					System.out.print("Quantas disciplinas terão vaga no edital? ");
-					int quantidade = Integer.parseInt(leitor.nextLine());
-	
-					for (int num = 0; num<quantidade; num++) {
-						System.out.print("Informe o nome da disciplina: ");
-						String disciplina = leitor.nextLine();
-	
-						System.out.print("Quantas vagas essa disciplina terá? ");
-						int quantVagas = Integer.parseInt(leitor.nextLine());
-	
-						Vaga vaga = new Vaga();
-						vaga.setDisciplina(disciplina);
-						vaga.setQuantidadeDeVagas(quantVagas);
-						edital.getVagas().add(vaga);
-					}
-	
-					central.adicionarEdital(edital);
-					break;
-					
-				case "5":
-					if (central.getTodosOsEditais() != null) {
-						System.out.println(central.getTodosOsEditais().size() + " editais cadastrados.");		
-					}else {
-						System.out.println("Nenhum edital cadastrado");
-					}
-					break;
-					
-				case "6":
-					System.out.print("Informe o id do edital que deseja detalhar: ");
-					long id = Long.parseLong(leitor.nextLine());
-					edital = central.recuperarEditalPeloId(id);
-	
-					if (edital != null) {
-						System.out.println(edital.toString());
-					}else {
-						System.out.println("Edital não encontrado.");
-					}
-					break;
-	
-				case "7":
-					
-					System.out.print("Informe a matrícula do aluno: ");
-					matricula = leitor.nextLine();
-	
-					System.out.print("Informe o id do edital: ");
-					id = Long.parseLong(leitor.nextLine());
-	
-					System.out.print("Informe o nome da disciplina da vaga: ");
-					String disciplina = leitor.nextLine();
-	
-					aluno = central.recuperarAlunoPorMatricula(matricula);
-	
-					if (central.recuperarEditalPeloId(id).inscrever(aluno, disciplina)) {
-						Mensageiro.enviarEmail(aluno, "Inscrição realizada com sucesso!");
-					}
-					break;
-	
-				case "8":
-					System.out.print("Informe a matrícula do aluno: ");
-					matricula = leitor.nextLine();
-	
-					System.out.print("Informe o id do edital: ");
-					id = Long.parseLong(leitor.nextLine());
-	
-					GeradorDeRelatorios.obterComprovanteDeInscricoesAluno(matricula, id, central);
-					break;
-	
-				case "s":
-					System.out.println("Programa Finalizado, informações salvas!");
-					try {
-						persistencia.salvarCentral(central, "central.xml");
-					} catch (Exception e) {
-						System.out.println("Não foi possível salvar as informações da central.");
-					}
-					leitor.close();
-					System.exit(0);
-					break;
-					
-				default:
-					System.out.println("Opção inválida. Por favor, escolha uma opção válida.");
-			}
-		}
-	}
-	*/
+            String escolha = leitor.nextLine().toLowerCase();
+            try {
+                switch (escolha) {
+                    case "1":
+                        cadastrarAluno(alunoDao, leitor);
+                        break;
+
+                    case "2":
+                        listarTodosOsAlunos(alunoDao);
+                        break;
+
+                    case "3":
+                        buscarAlunoPorMatricula(alunoDao, leitor);
+                        break;
+
+                    case "4":
+                        editarAluno(alunoDao, leitor);
+                        break;
+
+                    case "s":
+                        System.out.println("Programa encerrado. Até logo!");
+                        leitor.close();
+                        alunoDao.fecharFactory(); // Fecha a factory ao sair
+                        System.exit(0);
+
+                    default:
+                        System.out.println("Opção inválida. Por favor, escolha uma opção válida.");
+                }
+            } catch (Exception e) {
+                System.err.println("Erro: " + e.getMessage());
+            }
+        }
+    }
+
+    private static void cadastrarAluno(AlunoDao alunoDao, Scanner leitor) throws Exception {
+        System.out.print("Digite o nome do aluno: ");
+        String nome = leitor.nextLine();
+
+        System.out.print("Digite a matrícula do aluno: ");
+        String matricula = leitor.nextLine();
+
+        System.out.print("Digite o email do aluno: ");
+        String email = leitor.nextLine();
+
+        System.out.print("Digite a senha do aluno: ");
+        String senha = leitor.nextLine();
+
+        System.out.print("Digite o gênero do aluno (M/F): ");
+        String genero = leitor.nextLine().toUpperCase();
+
+        AlunoDTO alunoDTO = new AlunoDTO(nome, matricula, email, senha);
+
+        alunoDao.cadastrarAluno(alunoDTO);
+        System.out.println("Aluno cadastrado com sucesso!");
+    }
+
+    private static void listarTodosOsAlunos(AlunoDao alunoDao) throws Exception {
+        List<AlunoDTO> alunos = alunoDao.listarTodosOsAlunos();
+
+        if (alunos.isEmpty()) {
+            System.out.println("Não há alunos cadastrados no momento.");
+        } else {
+            System.out.println("\nLista de Alunos:");
+            for (AlunoDTO aluno : alunos) {
+                System.out.println(aluno);
+            }
+        }
+    }
+
+    private static void buscarAlunoPorMatricula(AlunoDao alunoDao, Scanner leitor) throws Exception {
+        System.out.print("Digite a matrícula do aluno que deseja buscar: ");
+        String matricula = leitor.nextLine();
+
+        AlunoDTO aluno = alunoDao.buscarAluno(new AlunoDTO(matricula));
+        if (aluno != null) {
+            System.out.println("\nInformações do Aluno:");
+            System.out.println(aluno);
+        } else {
+            System.out.println("Aluno não encontrado.");
+        }
+    }
+
+    private static void editarAluno(AlunoDao alunoDao, Scanner leitor) throws Exception {
+        System.out.print("Digite a matrícula do aluno que deseja editar: ");
+        String matricula = leitor.nextLine();
+
+        AlunoDTO aluno = alunoDao.buscarAluno(new AlunoDTO());
+        if (aluno == null) {
+            System.out.println("Aluno não encontrado.");
+            return;
+        }
+
+        System.out.print("Digite o novo nome do aluno (ou deixe em branco para manter): ");
+        String novoNome = leitor.nextLine();
+        if (!novoNome.isBlank()) {
+            aluno.setNome(novoNome);
+        }
+
+        System.out.print("Digite o novo email do aluno (ou deixe em branco para manter): ");
+        String novoEmail = leitor.nextLine();
+        if (!novoEmail.isBlank()) {
+            aluno.setEmail(novoEmail);
+        }
+
+        alunoDao.editarAluno(aluno);
+        System.out.println("Aluno atualizado com sucesso!");
+    }
 }
