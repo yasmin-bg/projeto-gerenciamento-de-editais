@@ -1,5 +1,8 @@
 package mappers;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import dto.DisciplinaDTO;
 import dto.EditalDeMonitoriaDTO;
 import model.Disciplina;
@@ -15,13 +18,16 @@ public class MapperEditalDeMonitoria {
 		edital.setNumero(dto.getNumero());
 		
 		MapperDisciplina mapperDisciplina = new MapperDisciplina();
+		List<Disciplina> lista = new ArrayList<>();
 		
 		//Percorre todas as DisciplinaDTO do EditalDTO
 		for(DisciplinaDTO disciplinaDTO: dto.getDisciplinas()) {
 			
 			//Transforma cada DisciplinaDTO em objeto Disciplina e adiciona na lista de disciplinas
-			edital.getDisciplinas().add(mapperDisciplina.fromDTO(disciplinaDTO));
+			lista.add(mapperDisciplina.fromDTO(disciplinaDTO));
 		}
+		
+		edital.setDisciplinas(lista);
 		
 		return edital;
 	}
