@@ -90,6 +90,14 @@ public class EditalDeMonitoriaController {
 		}
          
     }
+    
+    public void detalharEdital(EditalDeMonitoriaDTO dto) {
+    	dto = buscarEditalPorId(dto);
+    	if(dto != null) {
+    		MapperEditalDeMonitoria mapper = new MapperEditalDeMonitoria();
+    		System.out.println(mapper.fromDTO(dto));	
+    	}
+    }
 
     public void fecharRecursos() {
         editalDeMonitoriaDAO.fecharFactory();
