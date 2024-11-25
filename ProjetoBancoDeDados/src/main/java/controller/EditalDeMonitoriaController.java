@@ -1,5 +1,9 @@
 package controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import dao.DisciplinaDAOJPA;
 import dao.EditalDeMonitoriaDAO;
 import dto.AlunoDTO;
 import dto.DisciplinaDTO;
@@ -7,10 +11,6 @@ import dto.EditalDeMonitoriaDTO;
 import exception.ListaDeEditaisVaziaException;
 import mappers.MapperEditalDeMonitoria;
 import model.EditalDeMonitoria;
-
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 public class EditalDeMonitoriaController {
 
@@ -41,8 +41,12 @@ public class EditalDeMonitoriaController {
         boolean inscrito = edital.inscrever(alunoDTO, disciplinaDTO);
 
         if (inscrito) {
-            EditalDeMonitoriaDAO dao = new EditalDeMonitoriaDAO();
-            dao.atualizar(mapper.toDTO(edital));
+            this.editalDeMonitoriaDAO.atualizar(editalDTO);
+            DisciplinaDAOJPA daoDisciplina = new DisciplinaDAOJPA();
+            for(DisciplinaDTO dto: editalDTO.getDisciplinas()) {
+            	daoDisciplina.atualizar(disciplinaDTO);
+            	
+            }
         }
 
         return inscrito;
@@ -72,7 +76,7 @@ public class EditalDeMonitoriaController {
     }
 
     public boolean atualizarEdital(EditalDeMonitoriaDTO edital) {
-        if (edital.getId() != 0 || !edital.getDataInicio().isAfter(edital.getDataFinal())) {
+        if (!edital.getDataInicio().isAfter(edital.getDataFinal())) {
         	editalDeMonitoriaDAO.atualizar(edital);
             return true;
         }
@@ -96,6 +100,9 @@ public class EditalDeMonitoriaController {
     	if(dto != null) {
     		MapperEditalDeMonitoria mapper = new MapperEditalDeMonitoria();
     		System.out.println(mapper.fromDTO(dto));	
+    	}else {
+    		System.out.println("Erro ao detalhar edital");	
+
     	}
     }
 

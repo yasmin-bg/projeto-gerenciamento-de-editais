@@ -1,17 +1,18 @@
 package dao;
 
-import dto.EditalDeMonitoriaDTO;
-import mappers.MapperEditalDeMonitoria;
-import model.EditalDeMonitoria;
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.TypedQuery;
 
+import dto.DisciplinaDTO;
+import dto.EditalDeMonitoriaDTO;
 import exception.ListaDeEditaisVaziaException;
-
-import java.util.ArrayList;
-import java.util.List;
+import mappers.MapperEditalDeMonitoria;
+import model.EditalDeMonitoria;
 
 public class EditalDeMonitoriaDAO {
 
@@ -49,7 +50,13 @@ public class EditalDeMonitoriaDAO {
             
             if(edital != null) {
             	MapperEditalDeMonitoria mapper = new MapperEditalDeMonitoria();
-            	em.merge(mapper.fromDTO(dto));
+            	edital = mapper.fromDTO(dto);
+            	em.merge(edital);
+            	
+            	for(DisciplinaDTO disciplina: dto.getDisciplinas()) {
+            		DisciplinaDAOJPA daoDisciplina = new DisciplinaDAOJPA();
+            		daoDisciplina.atualizar(disciplina);
+            	}
             }	
             
     	} catch (Exception e) {

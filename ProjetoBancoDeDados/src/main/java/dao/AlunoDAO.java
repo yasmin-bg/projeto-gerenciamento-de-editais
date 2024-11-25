@@ -6,7 +6,6 @@ import dto.AlunoDTO;
 import exception.AlunoJaCadastradoException;
 import exception.AlunoNaoCadastradoException;
 import exception.ListaDeAlunosVaziaException;
-import model.Aluno;
 
 public interface AlunoDAO {
 	public void cadastrarAluno(AlunoDTO aluno) throws AlunoJaCadastradoException;
