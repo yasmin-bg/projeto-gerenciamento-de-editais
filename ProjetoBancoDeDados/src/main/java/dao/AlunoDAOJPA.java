@@ -90,14 +90,15 @@ public class AlunoDAOJPA implements AlunoDAO {
 	    try {
             TypedQuery<Aluno> alunos = entityManager.createQuery("SELECT e FROM Aluno e", Aluno.class);
             List<AlunoDTO> alunosDTO = new ArrayList<>();
-            if(alunosDTO.size()== 0) {
-            	throw new AlunoJaCadastradoException();
-            }
-            for(Aluno aluno: alunos.getResultList()) {
-            	alunosDTO.add(conversor.toDTO(aluno));	
+            if(alunos.getResultList().size()== 0) {
+            	throw new ListaDeAlunosVaziaException();
+            }else {
+            	for(Aluno aluno: alunos.getResultList()) {
+            		alunosDTO.add(conversor.toDTO(aluno));	
+            	}  	
             }
             return alunosDTO;
-        } catch (Exception e) {
+        }catch (Exception e) {
 	    	entityManager.getTransaction().rollback();
 	    	throw e;
         } finally {

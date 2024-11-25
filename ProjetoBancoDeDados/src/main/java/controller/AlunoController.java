@@ -35,7 +35,7 @@ public class AlunoController {
 		}
     }
     public AlunoDTO buscarAlunoPorMatricula(AlunoDTO aluno) {
-    	AlunoDTO alunoEncontrado = new AlunoDTO();
+    	AlunoDTO alunoEncontrado = null;
     	try {
 			alunoEncontrado = alunoDao.buscarAluno(aluno);
 		} catch (AlunoNaoCadastradoException e) {
@@ -57,5 +57,6 @@ public class AlunoController {
             return new ArrayList<>(); // Retorna uma lista vazia em caso de erro genérico
         }
     }
+    
 }
 
