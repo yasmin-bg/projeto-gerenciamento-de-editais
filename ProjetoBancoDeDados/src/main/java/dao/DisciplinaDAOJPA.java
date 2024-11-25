@@ -8,7 +8,7 @@ import dto.DisciplinaDTO;
 import mappers.MapperDisciplina;
 import model.Disciplina;
 
-public class DisciplinaDAOJPA implements DisciplinaDAO{
+public class DisciplinaDAOJPA implements DisciplinaDAO {
 	
 	private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("editais-monitoria");
 
@@ -42,21 +42,21 @@ public class DisciplinaDAOJPA implements DisciplinaDAO{
     }
     
     public void atualizar(DisciplinaDTO dto) {
-    	EntityManager entityManager = emf.createEntityManager();
+    	EntityManager em = emf.createEntityManager();
     	    try {
-    	        entityManager.getTransaction().begin();
-    	        Disciplina disciplina = entityManager.find(Disciplina.class, dto.getId());
+    	        em.getTransaction().begin();
+    	        Disciplina disciplina = em.find(Disciplina.class, dto.getId());
     	        if (disciplina != null) {
     	        	MapperDisciplina mapper = new MapperDisciplina();
     	        	disciplina = mapper.fromDTO(dto);
-    	        	entityManager.merge(disciplina);        	
+    	        	em.merge(disciplina);        	
     	        }
     	        
     	    }catch(Exception e) {
-    	    	entityManager.getTransaction().rollback();
+    	    	em.getTransaction().rollback();
     	    	throw e;
     	    }finally {
-    	    	entityManager.close();
+    	    	em.close();
     	    }
     	
     }
@@ -83,5 +83,4 @@ public class DisciplinaDAOJPA implements DisciplinaDAO{
             emf.close();
         }
     }
-
 }
