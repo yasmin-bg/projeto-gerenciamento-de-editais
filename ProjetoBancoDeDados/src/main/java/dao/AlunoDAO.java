@@ -1,7 +1,6 @@
 package dao;
 
 import java.util.List;
-
 import dto.AlunoDTO;
 import exception.AlunoJaCadastradoException;
 import exception.AlunoNaoCadastradoException;
@@ -12,5 +11,4 @@ public interface AlunoDAO {
 	public void editarAluno(AlunoDTO aluno) throws Exception, AlunoNaoCadastradoException;
 	public AlunoDTO buscarAluno(AlunoDTO dto) throws AlunoNaoCadastradoException,Exception;
 	public List<AlunoDTO> listarTodosOsAlunos() throws ListaDeAlunosVaziaException, Exception;
-
 }

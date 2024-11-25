@@ -14,7 +14,7 @@ import exception.ListaDeEditaisVaziaException;
 import mappers.MapperEditalDeMonitoria;
 import model.EditalDeMonitoria;
 
-public class EditalDeMonitoriaDAO {
+public class EditalDeMonitoriaDAOJPA {
 
     private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("editais-monitoria");
 
