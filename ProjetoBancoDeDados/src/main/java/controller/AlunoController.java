@@ -13,22 +13,19 @@ import mappers.MapperAluno;
 public class AlunoController {
 
     private final AlunoDao alunoDao;
-    private MapperAluno conversor;
 
     public AlunoController(MapperAluno conversor) {
         this.alunoDao = new AlunoDao();
-        this.conversor= conversor;
     }
     
     public void salvarAluno(AlunoDTO aluno) {
     	try {
 			alunoDao.cadastrarAluno(aluno);
-			aluno.getMatricula();
 		} catch (AlunoJaCadastradoException e) {
-			System.out.println("O aluno da Matricula:" + aluno.getMatricula()+"já está cadastrado.");
+			System.out.println("O aluno da matrícula: " + aluno.getMatricula()+" já está cadastrado.");
 		}
     	
-   }
+    }
     public void editarAluno(AlunoDTO aluno) {
     	try {
 			alunoDao.editarAluno(aluno);
@@ -39,14 +36,15 @@ public class AlunoController {
 		}
     }
     public AlunoDTO buscarAlunoPorMatricula(AlunoDTO aluno) {
+    	AlunoDTO alunoEncontrado = new AlunoDTO();
     	try {
-			alunoDao.buscarAluno(aluno);
+			alunoEncontrado = alunoDao.buscarAluno(aluno);
 		} catch (AlunoNaoCadastradoException e) {
 			System.out.println("Aluno não cadastrado.");
 		} catch (Exception e) {
 			System.out.print("Erro ao carregar informações.");
 		}
-		return aluno;
+		return alunoEncontrado;
     	
     }
     public List<AlunoDTO> listarAlunos() {
