@@ -1,27 +1,33 @@
 package dao;
 
-import dto.EditalDeMonitoriaDTO;
-import mappers.MapperEditalDeMonitoria;
-import model.EditalDeMonitoria;
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.TypedQuery;
-import java.util.List;
+
+import dto.DisciplinaDTO;
+import dto.EditalDeMonitoriaDTO;
+import exception.ListaDeEditaisVaziaException;
+import mappers.MapperEditalDeMonitoria;
+import model.EditalDeMonitoria;
 
 public class EditalDeMonitoriaDAO {
 
     private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("editais-monitoria");
 
-    public void salvar(EditalDeMonitoriaDTO dto) {
+    public void salvar(EditalDeMonitoriaDTO dto) throws RuntimeException{
         EntityManager em = emf.createEntityManager();
         try {
             em.getTransaction().begin();
                  
             EditalDeMonitoria edital = em.find(EditalDeMonitoria.class, dto.getId());
             
-            if(edital.equals(null)) {           	
-            	em.persist(edital);
+            if(edital == null) {  
+            	MapperEditalDeMonitoria mapper = new MapperEditalDeMonitoria();
+            	em.persist(mapper.fromDTO(dto));
             }
             
             em.getTransaction().commit();
@@ -41,10 +47,16 @@ public class EditalDeMonitoriaDAO {
     		em.getTransaction().begin();
             
             EditalDeMonitoria edital = em.find(EditalDeMonitoria.class, dto.getId());
-            MapperEditalDeMonitoria mapper = new MapperEditalDeMonitoria();
             
-            if(!edital.equals(null)) {
-            	em.merge(mapper.fromDTO(dto));
+            if(edital != null) {
+            	MapperEditalDeMonitoria mapper = new MapperEditalDeMonitoria();
+            	edital = mapper.fromDTO(dto);
+            	em.merge(edital);
+            	
+            	for(DisciplinaDTO disciplina: dto.getDisciplinas()) {
+            		DisciplinaDAOJPA daoDisciplina = new DisciplinaDAOJPA();
+            		daoDisciplina.atualizar(disciplina);
+            	}
             }	
             
     	} catch (Exception e) {
@@ -55,10 +67,16 @@ public class EditalDeMonitoriaDAO {
         }
     }
 
-    public EditalDeMonitoriaDTO buscarPorId(EditalDeMonitoriaDTO dto) {
+    public EditalDeMonitoriaDTO buscarPorId(EditalDeMonitoriaDTO dto) throws RuntimeException{
         EntityManager em = emf.createEntityManager();
         try {
-            return em.find(EditalDeMonitoriaDTO.class, dto.getId());
+        	EditalDeMonitoria edital = em.find(EditalDeMonitoria.class, dto.getId());
+        	if(edital == null) {
+        		//throw new EditalNaoEncontradoException();
+        		return null;
+        	}
+        	MapperEditalDeMonitoria mapper = new MapperEditalDeMonitoria();
+            return mapper.toDTO(edital);
         } catch (Exception e) {
             throw new RuntimeException("Erro ao buscar edital: " + e.getMessage(), e);
         } finally {
@@ -66,20 +84,26 @@ public class EditalDeMonitoriaDAO {
         }
     }
 
-    public List<EditalDeMonitoriaDTO> listarTodos() {
+    public List<EditalDeMonitoriaDTO> listarTodos() throws ListaDeEditaisVaziaException, RuntimeException{
         EntityManager em = emf.createEntityManager();
         try {
             TypedQuery<EditalDeMonitoria> query = em.createQuery(
                 "SELECT e FROM EditalDeMonitoria e", EditalDeMonitoria.class
             );
             
-            MapperEditalDeMonitoria mapper = new MapperEditalDeMonitoria();
-            List<EditalDeMonitoriaDTO> lista = null;
-            for(EditalDeMonitoria edital : query.getResultList()) {
-            	lista.add(mapper.toDTO(edital));
+            if(query.getResultList().size() == 0) {
+            	throw new ListaDeEditaisVaziaException();
+            }else {
+            	
+            	MapperEditalDeMonitoria mapper = new MapperEditalDeMonitoria();
+            	List<EditalDeMonitoriaDTO> lista = new ArrayList<>();
+            	for(EditalDeMonitoria edital : query.getResultList()) {
+            		lista.add(mapper.toDTO(edital));
+            	}
+            	return lista;
             }
             
-            return lista;
+            
       
         } catch (Exception e) {
             throw new RuntimeException("Erro ao listar editais: " + e.getMessage(), e);
@@ -88,11 +112,11 @@ public class EditalDeMonitoriaDAO {
         }
     }
 
-    public void excluir(EditalDeMonitoriaDTO dto) {
+    public void excluir(EditalDeMonitoriaDTO dto) throws RuntimeException{
         EntityManager em = emf.createEntityManager();
         try {
             em.getTransaction().begin();
-            EditalDeMonitoriaDTO edital = em.find(EditalDeMonitoriaDTO.class, dto.getId());
+            EditalDeMonitoria edital = em.find(EditalDeMonitoria.class, dto.getId());
             if (edital != null) {
                 em.remove(edital);
             }

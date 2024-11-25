@@ -1,14 +1,16 @@
 package controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import dao.DisciplinaDAOJPA;
 import dao.EditalDeMonitoriaDAO;
 import dto.AlunoDTO;
 import dto.DisciplinaDTO;
 import dto.EditalDeMonitoriaDTO;
+import exception.ListaDeEditaisVaziaException;
 import mappers.MapperEditalDeMonitoria;
 import model.EditalDeMonitoria;
-
-import java.time.LocalDateTime;
-import java.util.List;
 
 public class EditalDeMonitoriaController {
 
@@ -20,12 +22,15 @@ public class EditalDeMonitoriaController {
     
     public boolean criarEdital(EditalDeMonitoriaDTO edital) {
     	if (!edital.getDataInicio().isAfter(edital.getDataFinal())) {
-    		editalDeMonitoriaDAO.salvar(edital);
-    		return true;
-    		
+    		try {
+				editalDeMonitoriaDAO.salvar(edital);
+				return true;
+			} catch (RuntimeException e) {
+				System.out.println(e.getMessage());
+				e.printStackTrace();
+			} 		
     	}
-    	
-    	return false;  
+		return false;  
     }
     
     public boolean inscrever(EditalDeMonitoriaDTO editalDTO, AlunoDTO alunoDTO, DisciplinaDTO disciplinaDTO) {
@@ -36,24 +41,42 @@ public class EditalDeMonitoriaController {
         boolean inscrito = edital.inscrever(alunoDTO, disciplinaDTO);
 
         if (inscrito) {
-            EditalDeMonitoriaDAO dao = new EditalDeMonitoriaDAO();
-            dao.atualizar(mapper.toDTO(edital));
+            this.editalDeMonitoriaDAO.atualizar(editalDTO);
+            DisciplinaDAOJPA daoDisciplina = new DisciplinaDAOJPA();
+            for(DisciplinaDTO dto: editalDTO.getDisciplinas()) {
+            	daoDisciplina.atualizar(disciplinaDTO);
+            	
+            }
         }
 
         return inscrito;
     }
 
     public EditalDeMonitoriaDTO buscarEditalPorId(EditalDeMonitoriaDTO dto) {
-        EditalDeMonitoriaDTO edital = editalDeMonitoriaDAO.buscarPorId(dto);
-        return edital;
+        EditalDeMonitoriaDTO edital;
+		try {
+			edital = editalDeMonitoriaDAO.buscarPorId(dto);
+			return edital;
+		} catch (Exception e) {
+			System.out.println("Erro ao buscar edital");
+			return null;
+		}
     }
 
     public List<EditalDeMonitoriaDTO> listarTodosEditais() {
-        return editalDeMonitoriaDAO.listarTodos();
+        try {
+			return editalDeMonitoriaDAO.listarTodos();
+		} catch (ListaDeEditaisVaziaException e) {
+			System.out.print("Não há editais cadastrados");
+			return new ArrayList<>();
+		} catch (RuntimeException e) {
+			System.out.print("Erro ao listar editais");
+			return new ArrayList<>();
+		}
     }
 
     public boolean atualizarEdital(EditalDeMonitoriaDTO edital) {
-        if (edital.getId() != 0 || !edital.getDataInicio().isAfter(edital.getDataFinal())) {
+        if (!edital.getDataInicio().isAfter(edital.getDataFinal())) {
         	editalDeMonitoriaDAO.atualizar(edital);
             return true;
         }
@@ -62,13 +85,25 @@ public class EditalDeMonitoriaController {
     }
 
     public boolean deletarEdital(EditalDeMonitoriaDTO dto) {
-        EditalDeMonitoriaDTO edital = buscarEditalPorId(dto);
-        if (edital != null) {
-            editalDeMonitoriaDAO.excluir(dto);
-            return true;
-        }
-        
-        return false; 
+        try {
+			editalDeMonitoriaDAO.excluir(dto);
+			return true;
+		} catch (RuntimeException e) {
+			e.printStackTrace();
+			return false;
+		}
+         
+    }
+    
+    public void detalharEdital(EditalDeMonitoriaDTO dto) {
+    	dto = buscarEditalPorId(dto);
+    	if(dto != null) {
+    		MapperEditalDeMonitoria mapper = new MapperEditalDeMonitoria();
+    		System.out.println(mapper.fromDTO(dto));	
+    	}else {
+    		System.out.println("Erro ao detalhar edital");	
+
+    	}
     }
 
     public void fecharRecursos() {

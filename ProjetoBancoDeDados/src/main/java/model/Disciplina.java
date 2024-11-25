@@ -1,7 +1,9 @@
 package model;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -24,11 +26,11 @@ public class Disciplina {
 	@Column(name = "quantidade_vagas", nullable = false)
 	private int quantidadeDeVagas;
 	
-	@ManyToMany
+	@ManyToMany(cascade = CascadeType.ALL, targetEntity = model.Aluno.class)
 	@JoinTable(name = "inscricoes",
 				joinColumns = @JoinColumn(name = "disciplina"),
 				inverseJoinColumns = @JoinColumn(name = "aluno"))
-	private List<Aluno> listaDeAlunosInscritos;
+	private List<Aluno> listaDeAlunosInscritos = new ArrayList<>();
 
 	public Disciplina() {
 	}

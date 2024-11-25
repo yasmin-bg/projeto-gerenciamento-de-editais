@@ -8,18 +8,25 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.TypedQuery;
 
-import Exception.AlunoJaCadastradoException;
-import Exception.AlunoNaoCadastradoException;
-import Exception.ListaDeAlunosVaziaException;
 import dto.AlunoDTO;
+import exception.AlunoJaCadastradoException;
+import exception.AlunoNaoCadastradoException;
+import exception.ListaDeAlunosVaziaException;
 import mappers.MapperAluno;
 import model.Aluno;
 
-public class AlunoDao implements IAlunoDao {
-    private EntityManagerFactory entityFactory = Persistence.createEntityManagerFactory("Alunos");
+public class AlunoDAOJPA implements AlunoDAO {
+    private EntityManagerFactory entityFactory = Persistence.createEntityManagerFactory("editais-monitoria");
     private MapperAluno conversor;
 
-	public AlunoDao() {
+	public AlunoDAOJPA() {
+		this.conversor= new MapperAluno();
+	}
+	
+	public void fecharFactory() {
+        if (entityFactory.isOpen()) {
+        	entityFactory.close();
+        }
 	}
 	@Override
 	public void cadastrarAluno(AlunoDTO dto) throws AlunoJaCadastradoException {
@@ -41,27 +48,6 @@ public class AlunoDao implements IAlunoDao {
 	        entityManager.close();
 	    }
 	}
-
-	@Override
-	public void excluirAluno(AlunoDTO dto) throws AlunoNaoCadastradoException{
-	    EntityManager entityManager = entityFactory.createEntityManager();
-	    try {
-	        entityManager.getTransaction().begin();
-	        Aluno alunoExiste = entityManager.find(Aluno.class, dto.getMatricula());
-	        alunoExiste = conversor.fromDTO(dto);
-	        if (alunoExiste == null) {
-	        	throw new AlunoNaoCadastradoException();
-	        }
-        	entityManager.remove(alunoExiste);
-        	entityManager.getTransaction().commit();	
-	        
-	    } catch (Exception e) {
-	    	entityManager.getTransaction().rollback();
-	        throw e;
-	    } finally {
-	    	entityManager.close();
-	    }
-	  }	
 	@Override
 	public void editarAluno(AlunoDTO dto) throws Exception,AlunoNaoCadastradoException {
 	    EntityManager entityManager = entityFactory.createEntityManager();
@@ -104,14 +90,15 @@ public class AlunoDao implements IAlunoDao {
 	    try {
             TypedQuery<Aluno> alunos = entityManager.createQuery("SELECT e FROM Aluno e", Aluno.class);
             List<AlunoDTO> alunosDTO = new ArrayList<>();
-            if(alunosDTO.size()== 0) {
-            	throw new AlunoJaCadastradoException();
-            }
-            for(Aluno aluno: alunos.getResultList()) {
-            	alunosDTO.add(conversor.toDTO(aluno));	
+            if(alunos.getResultList().size()== 0) {
+            	throw new ListaDeAlunosVaziaException();
+            }else {
+            	for(Aluno aluno: alunos.getResultList()) {
+            		alunosDTO.add(conversor.toDTO(aluno));	
+            	}  	
             }
             return alunosDTO;
-        } catch (Exception e) {
+        }catch (Exception e) {
 	    	entityManager.getTransaction().rollback();
 	    	throw e;
         } finally {
@@ -119,3 +106,4 @@ public class AlunoDao implements IAlunoDao {
         }
   	}
 }
+	
