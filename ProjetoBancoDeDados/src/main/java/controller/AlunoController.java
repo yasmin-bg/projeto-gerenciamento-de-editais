@@ -8,13 +8,12 @@ import Exception.AlunoNaoCadastradoException;
 import Exception.ListaDeAlunosVaziaException;
 import dao.AlunoDao;
 import dto.AlunoDTO;
-import mappers.MapperAluno;
 
 public class AlunoController {
 
     private final AlunoDao alunoDao;
 
-    public AlunoController(MapperAluno conversor) {
+    public AlunoController() {
         this.alunoDao = new AlunoDao();
     }
     
