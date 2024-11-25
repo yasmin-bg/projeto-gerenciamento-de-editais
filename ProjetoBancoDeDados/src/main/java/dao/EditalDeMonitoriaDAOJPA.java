@@ -11,7 +11,10 @@ import javax.persistence.TypedQuery;
 import dto.DisciplinaDTO;
 import dto.EditalDeMonitoriaDTO;
 import exception.ListaDeEditaisVaziaException;
+import mappers.MapperDisciplina;
 import mappers.MapperEditalDeMonitoria;
+import model.Aluno;
+import model.Disciplina;
 import model.EditalDeMonitoria;
 
 public class EditalDeMonitoriaDAOJPA implements EditalDeMonitoriaDAO {
@@ -46,18 +49,10 @@ public class EditalDeMonitoriaDAOJPA implements EditalDeMonitoriaDAO {
     	try {
     		em.getTransaction().begin();
             
-            EditalDeMonitoria edital = em.find(EditalDeMonitoria.class, dto.getId());
-            
-            if(edital != null) {
-            	MapperEditalDeMonitoria mapper = new MapperEditalDeMonitoria();
-            	edital = mapper.fromDTO(dto);
-            	em.merge(edital);
-            	
-            	for(DisciplinaDTO disciplina: dto.getDisciplinas()) {
-            		DisciplinaDAOJPA daoDisciplina = new DisciplinaDAOJPA();
-            		daoDisciplina.atualizar(disciplina);
-            	}
-            }	
+            MapperEditalDeMonitoria mapper = new MapperEditalDeMonitoria();
+            EditalDeMonitoria edital = mapper.fromDTO(dto);	
+            em.merge(edital);
+            em.getTransaction().commit();	
             
     	} catch (Exception e) {
             em.getTransaction().rollback();

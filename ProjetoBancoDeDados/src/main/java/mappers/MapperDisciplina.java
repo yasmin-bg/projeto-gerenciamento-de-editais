@@ -1,5 +1,8 @@
 package mappers;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import dto.AlunoDTO;
 import dto.DisciplinaDTO;
 import model.Aluno;
@@ -13,13 +16,15 @@ public class MapperDisciplina {
 		disciplina.setQuantidadeDeVagas(dto.getQuantidadeDeVagas());
 		
 		MapperAluno mapperAluno = new MapperAluno();
-		
+		List<Aluno> lista = new ArrayList<>();
 		//Percorre todos os AlunoDTO da lista de inscritos da DisciplinaDTO
 		for(AlunoDTO alunoDTO: dto.getListaDeAlunosInscritos()) {
 			
 			//Transforma cada AlunoDTO em objeto Aluno e adiciona na lista de inscritos da disciplina
-			disciplina.getListaDeAlunosInscritos().add(mapperAluno.fromDTO(alunoDTO));
+			lista.add(mapperAluno.fromDTO(alunoDTO));
 		}
+		
+		disciplina.setListaDeAlunosInscritos(lista);
 		
 		return disciplina;
 	}

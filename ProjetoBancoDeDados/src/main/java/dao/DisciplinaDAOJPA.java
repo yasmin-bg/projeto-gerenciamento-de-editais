@@ -45,12 +45,9 @@ public class DisciplinaDAOJPA implements DisciplinaDAO{
     	EntityManager entityManager = emf.createEntityManager();
     	    try {
     	        entityManager.getTransaction().begin();
-    	        Disciplina disciplina = entityManager.find(Disciplina.class, dto.getId());
-    	        if (disciplina != null) {
-    	        	MapperDisciplina mapper = new MapperDisciplina();
-    	        	disciplina = mapper.fromDTO(dto);
-    	        	entityManager.merge(disciplina);        	
-    	        }
+    	        MapperDisciplina mapper = new MapperDisciplina();
+    	        Disciplina disciplina = mapper.fromDTO(dto);
+    	        entityManager.merge(disciplina);        	
     	        
     	    }catch(Exception e) {
     	    	entityManager.getTransaction().rollback();
