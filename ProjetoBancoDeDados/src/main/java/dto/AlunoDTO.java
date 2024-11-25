@@ -4,13 +4,11 @@ public class AlunoDTO {
 	private String nome;
 	private String matricula;
 	private String email;
-	private String senha;
 	
-	public AlunoDTO(String nome, String matricula, String email, String senha) {
+	public AlunoDTO(String nome, String matricula, String email) {
 	        this.nome = nome;
 	        this.matricula = matricula;
 	        this.email = email;
-	        this.senha = senha;
 	}
 	
 	public AlunoDTO() {
@@ -32,10 +30,9 @@ public class AlunoDTO {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	public String getSenha() {
-		return senha;
+
+	public void setMatricula(String matricula) {
+		this.matricula = matricula;
 	}
-	public void setSenha(String senha) {
-		this.senha = senha;
-	}
+
 }

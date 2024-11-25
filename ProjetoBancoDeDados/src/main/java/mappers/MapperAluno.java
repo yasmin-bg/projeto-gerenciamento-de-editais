@@ -9,8 +9,7 @@ public class MapperAluno {
 		return new Aluno(
 				dto.getNome(),
 				dto.getMatricula(),
-				dto.getEmail(),
-				dto.getSenha()
+				dto.getEmail()
 				);
 	}
 	
@@ -18,8 +17,7 @@ public class MapperAluno {
 		return new AlunoDTO(
 				aluno.getNome(),
 				aluno.getMatricula(),
-				aluno.getEmail(),
-				aluno.getSenha()
+				aluno.getEmail()
 				);
 	}
 
