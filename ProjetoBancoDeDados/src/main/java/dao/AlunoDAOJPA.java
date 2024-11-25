@@ -8,10 +8,10 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.TypedQuery;
 
-import Exception.AlunoJaCadastradoException;
-import Exception.AlunoNaoCadastradoException;
-import Exception.ListaDeAlunosVaziaException;
 import dto.AlunoDTO;
+import exception.AlunoJaCadastradoException;
+import exception.AlunoNaoCadastradoException;
+import exception.ListaDeAlunosVaziaException;
 import mappers.MapperAluno;
 import model.Aluno;
 

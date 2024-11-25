@@ -4,10 +4,12 @@ import dao.EditalDeMonitoriaDAO;
 import dto.AlunoDTO;
 import dto.DisciplinaDTO;
 import dto.EditalDeMonitoriaDTO;
+import exception.ListaDeEditaisVaziaException;
 import mappers.MapperEditalDeMonitoria;
 import model.EditalDeMonitoria;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 public class EditalDeMonitoriaController {
@@ -47,12 +49,26 @@ public class EditalDeMonitoriaController {
     }
 
     public EditalDeMonitoriaDTO buscarEditalPorId(EditalDeMonitoriaDTO dto) {
-        EditalDeMonitoriaDTO edital = editalDeMonitoriaDAO.buscarPorId(dto);
-        return edital;
+        EditalDeMonitoriaDTO edital;
+		try {
+			edital = editalDeMonitoriaDAO.buscarPorId(dto);
+			return edital;
+		} catch (Exception e) {
+			System.out.println("Erro ao buscar edital");
+			return null;
+		}
     }
 
     public List<EditalDeMonitoriaDTO> listarTodosEditais() {
-        return editalDeMonitoriaDAO.listarTodos();
+        try {
+			return editalDeMonitoriaDAO.listarTodos();
+		} catch (ListaDeEditaisVaziaException e) {
+			System.out.print("Não há editais cadastrados");
+			return new ArrayList<>();
+		} catch (RuntimeException e) {
+			System.out.print("Erro ao listar editais");
+			return new ArrayList<>();
+		}
     }
 
     public boolean atualizarEdital(EditalDeMonitoriaDTO edital) {
@@ -65,13 +81,14 @@ public class EditalDeMonitoriaController {
     }
 
     public boolean deletarEdital(EditalDeMonitoriaDTO dto) {
-        EditalDeMonitoriaDTO edital = buscarEditalPorId(dto);
-        if (edital != null) {
-            editalDeMonitoriaDAO.excluir(dto);
-            return true;
-        }
-        
-        return false; 
+        try {
+			editalDeMonitoriaDAO.excluir(dto);
+			return true;
+		} catch (RuntimeException e) {
+			e.printStackTrace();
+			return false;
+		}
+         
     }
 
     public void fecharRecursos() {

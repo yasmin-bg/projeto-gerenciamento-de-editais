@@ -2,10 +2,10 @@ package dao;
 
 import java.util.List;
 
-import Exception.AlunoJaCadastradoException;
-import Exception.AlunoNaoCadastradoException;
-import Exception.ListaDeAlunosVaziaException;
 import dto.AlunoDTO;
+import exception.AlunoJaCadastradoException;
+import exception.AlunoNaoCadastradoException;
+import exception.ListaDeAlunosVaziaException;
 import model.Aluno;
 
 public interface AlunoDAO {

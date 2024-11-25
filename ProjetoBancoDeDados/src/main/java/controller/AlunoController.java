@@ -3,11 +3,11 @@ package controller;
 import java.util.ArrayList;
 import java.util.List;
 
-import Exception.AlunoJaCadastradoException;
-import Exception.AlunoNaoCadastradoException;
-import Exception.ListaDeAlunosVaziaException;
 import dao.AlunoDAOJPA;
 import dto.AlunoDTO;
+import exception.AlunoJaCadastradoException;
+import exception.AlunoNaoCadastradoException;
+import exception.ListaDeAlunosVaziaException;
 
 public class AlunoController {
 
