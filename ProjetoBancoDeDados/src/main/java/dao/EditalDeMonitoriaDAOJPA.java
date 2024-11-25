@@ -8,13 +8,9 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.TypedQuery;
 
-import dto.DisciplinaDTO;
 import dto.EditalDeMonitoriaDTO;
 import exception.ListaDeEditaisVaziaException;
-import mappers.MapperDisciplina;
 import mappers.MapperEditalDeMonitoria;
-import model.Aluno;
-import model.Disciplina;
 import model.EditalDeMonitoria;
 
 public class EditalDeMonitoriaDAOJPA implements EditalDeMonitoriaDAO {

@@ -2,7 +2,7 @@ package controller;
 
 import java.util.ArrayList;
 import java.util.List;
-import dao.DisciplinaDAOJPA;
+
 import dao.EditalDeMonitoriaDAOJPA;
 import dto.AlunoDTO;
 import dto.DisciplinaDTO;

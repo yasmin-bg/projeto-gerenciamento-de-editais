@@ -155,6 +155,9 @@ public class Main {
  					System.out.println("Erro ao excluir edital");
  				}
  				break;
+ 			default:
+ 				System.out.println("Opção inválida!");
+ 				break;
  			}
          }
     }
