@@ -20,12 +20,15 @@ public class EditalDeMonitoriaController {
     
     public boolean criarEdital(EditalDeMonitoriaDTO edital) {
     	if (!edital.getDataInicio().isAfter(edital.getDataFinal())) {
-    		editalDeMonitoriaDAO.salvar(edital);
-    		return true;
-    		
+    		try {
+				editalDeMonitoriaDAO.salvar(edital);
+				return true;
+			} catch (RuntimeException e) {
+				System.out.println(e.getMessage());
+				e.printStackTrace();
+			} 		
     	}
-    	
-    	return false;  
+		return false;  
     }
     
     public boolean inscrever(EditalDeMonitoriaDTO editalDTO, AlunoDTO alunoDTO, DisciplinaDTO disciplinaDTO) {

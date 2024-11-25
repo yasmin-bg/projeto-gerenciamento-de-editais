@@ -13,15 +13,16 @@ public class EditalDeMonitoriaDAO {
 
     private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("editais-monitoria");
 
-    public void salvar(EditalDeMonitoriaDTO dto) {
+    public void salvar(EditalDeMonitoriaDTO dto) throws RuntimeException{
         EntityManager em = emf.createEntityManager();
         try {
             em.getTransaction().begin();
                  
             EditalDeMonitoria edital = em.find(EditalDeMonitoria.class, dto.getId());
             
-            if(edital.equals(null)) {           	
-            	em.persist(edital);
+            if(edital == null) {  
+            	MapperEditalDeMonitoria mapper = new MapperEditalDeMonitoria();
+            	em.persist(mapper.fromDTO(dto));
             }
             
             em.getTransaction().commit();
