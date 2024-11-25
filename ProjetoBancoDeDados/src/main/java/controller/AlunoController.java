@@ -21,7 +21,7 @@ public class AlunoController {
     	try {
 			alunoDao.cadastrarAluno(aluno);
 		} catch (AlunoJaCadastradoException e) {
-			System.out.println("O aluno da matrícula: " + aluno.getMatricula()+" já está cadastrado.");
+			System.out.println("Falha ao cadastrar aluno.");
 		}
     	
     }
