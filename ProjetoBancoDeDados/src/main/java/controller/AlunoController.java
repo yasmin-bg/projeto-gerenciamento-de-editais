@@ -3,32 +3,28 @@ package controller;
 import java.util.ArrayList;
 import java.util.List;
 
-import Exception.AlunoJaCadastradoException;
-import Exception.AlunoNaoCadastradoException;
-import Exception.ListaDeAlunosVaziaException;
-import dao.AlunoDao;
+import dao.AlunoDAOJPA;
 import dto.AlunoDTO;
-import mappers.MapperAluno;
+import exception.AlunoJaCadastradoException;
+import exception.AlunoNaoCadastradoException;
+import exception.ListaDeAlunosVaziaException;
 
 public class AlunoController {
 
-    private final AlunoDao alunoDao;
-    private MapperAluno conversor;
+    private final AlunoDAOJPA alunoDao;
 
-    public AlunoController(MapperAluno conversor) {
-        this.alunoDao = new AlunoDao();
-        this.conversor= conversor;
+    public AlunoController() {
+        this.alunoDao = new AlunoDAOJPA();
     }
     
     public void salvarAluno(AlunoDTO aluno) {
     	try {
 			alunoDao.cadastrarAluno(aluno);
-			aluno.getMatricula();
 		} catch (AlunoJaCadastradoException e) {
-			System.out.println("O aluno da Matricula:" + aluno.getMatricula()+"já está cadastrado.");
+			System.out.println("Falha ao cadastrar aluno.");
 		}
     	
-   }
+    }
     public void editarAluno(AlunoDTO aluno) {
     	try {
 			alunoDao.editarAluno(aluno);
@@ -39,14 +35,15 @@ public class AlunoController {
 		}
     }
     public AlunoDTO buscarAlunoPorMatricula(AlunoDTO aluno) {
+    	AlunoDTO alunoEncontrado = null;
     	try {
-			alunoDao.buscarAluno(aluno);
+			alunoEncontrado = alunoDao.buscarAluno(aluno);
 		} catch (AlunoNaoCadastradoException e) {
 			System.out.println("Aluno não cadastrado.");
 		} catch (Exception e) {
 			System.out.print("Erro ao carregar informações.");
 		}
-		return aluno;
+		return alunoEncontrado;
     	
     }
     public List<AlunoDTO> listarAlunos() {
@@ -60,5 +57,6 @@ public class AlunoController {
             return new ArrayList<>(); // Retorna uma lista vazia em caso de erro genérico
         }
     }
+    
 }
 

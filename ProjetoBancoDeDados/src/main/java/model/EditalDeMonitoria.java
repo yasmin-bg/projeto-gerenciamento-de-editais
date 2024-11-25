@@ -10,17 +10,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Table(name = "EDITAL_DE_MONITORIA")
 public class EditalDeMonitoria {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-
+    
+    @Column(nullable=false,unique = true)
     private String numero;
     private LocalDateTime dataInicio;
     private LocalDateTime dataFinal;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, targetEntity = model.Disciplina.class)
     private List<Disciplina> disciplinas = new ArrayList<>();
     
     public EditalDeMonitoria() {

@@ -1,11 +1,8 @@
 package dao;
 
-import java.util.List;
-
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-import javax.persistence.TypedQuery;
 
 import dto.DisciplinaDTO;
 import mappers.MapperDisciplina;
@@ -42,6 +39,26 @@ public class DisciplinaDAOJPA implements DisciplinaDAO{
         } finally {
             em.close();
         }
+    }
+    
+    public void atualizar(DisciplinaDTO dto) {
+    	EntityManager entityManager = emf.createEntityManager();
+    	    try {
+    	        entityManager.getTransaction().begin();
+    	        Disciplina disciplina = entityManager.find(Disciplina.class, dto.getId());
+    	        if (disciplina != null) {
+    	        	MapperDisciplina mapper = new MapperDisciplina();
+    	        	disciplina = mapper.fromDTO(dto);
+    	        	entityManager.merge(disciplina);        	
+    	        }
+    	        
+    	    }catch(Exception e) {
+    	    	entityManager.getTransaction().rollback();
+    	    	throw e;
+    	    }finally {
+    	    	entityManager.close();
+    	    }
+    	
     }
 
     public void excluir(DisciplinaDTO dto) {
