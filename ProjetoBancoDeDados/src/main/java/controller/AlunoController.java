@@ -6,15 +6,15 @@ import java.util.List;
 import Exception.AlunoJaCadastradoException;
 import Exception.AlunoNaoCadastradoException;
 import Exception.ListaDeAlunosVaziaException;
-import dao.AlunoDao;
+import dao.AlunoDAOJPA;
 import dto.AlunoDTO;
 
 public class AlunoController {
 
-    private final AlunoDao alunoDao;
+    private final AlunoDAOJPA alunoDao;
 
     public AlunoController() {
-        this.alunoDao = new AlunoDao();
+        this.alunoDao = new AlunoDAOJPA();
     }
     
     public void salvarAluno(AlunoDTO aluno) {

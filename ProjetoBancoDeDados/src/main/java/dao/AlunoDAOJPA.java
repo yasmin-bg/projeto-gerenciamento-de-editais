@@ -15,15 +15,14 @@ import dto.AlunoDTO;
 import mappers.MapperAluno;
 import model.Aluno;
 
-public class AlunoDao implements IAlunoDao {
+public class AlunoDAOJPA implements AlunoDAO {
     private EntityManagerFactory entityFactory = Persistence.createEntityManagerFactory("editais-monitoria");
     private MapperAluno conversor;
 
-	public AlunoDao(MapperAluno conversor) {
-		this.conversor=conversor;
+	public AlunoDAOJPA() {
+		this.conversor= new MapperAluno();
 	}
-	public AlunoDao( ) {
-	}
+	
 	public void fecharFactory() {
         if (entityFactory.isOpen()) {
         	entityFactory.close();

@@ -8,7 +8,7 @@ import Exception.ListaDeAlunosVaziaException;
 import dto.AlunoDTO;
 import model.Aluno;
 
-public interface IAlunoDao {
+public interface AlunoDAO {
 	public void cadastrarAluno(AlunoDTO aluno) throws AlunoJaCadastradoException;
 	public void editarAluno(AlunoDTO aluno) throws Exception, AlunoNaoCadastradoException;
 	public AlunoDTO buscarAluno(AlunoDTO dto) throws AlunoNaoCadastradoException,Exception;

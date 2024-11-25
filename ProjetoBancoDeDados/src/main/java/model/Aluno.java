@@ -19,14 +19,10 @@ public class Aluno {
 	@Column(nullable=false)
 	private String email;
 	
-	@Column(nullable=false)
-	private String senha;
-	
-	public Aluno(String nome, String matricula, String email, String senha) {
+	public Aluno(String nome, String matricula, String email) {
 	        this.nome = nome;
 	        this.matricula = matricula;
 	        this.email = email;
-	        this.senha = senha;
 	}
 	public Aluno() {
 	}
@@ -47,10 +43,5 @@ public class Aluno {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	public String getSenha() {
-		return senha;
-	}
-	public void setSenha(String senha) {
-		this.senha = senha;
-	}
+	
 }
