@@ -22,7 +22,7 @@ public class EditalDeMonitoria {
     private LocalDateTime dataInicio;
     private LocalDateTime dataFinal;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, targetEntity = model.Disciplina.class)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Disciplina> disciplinas = new ArrayList<>();
     
     public EditalDeMonitoria() {

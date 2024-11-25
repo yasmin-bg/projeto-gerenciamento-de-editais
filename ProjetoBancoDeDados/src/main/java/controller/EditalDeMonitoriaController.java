@@ -3,8 +3,7 @@ package controller;
 import java.util.ArrayList;
 import java.util.List;
 
-import dao.DisciplinaDAOJPA;
-import dao.EditalDeMonitoriaDAO;
+import dao.EditalDeMonitoriaDAOJPA;
 import dto.AlunoDTO;
 import dto.DisciplinaDTO;
 import dto.EditalDeMonitoriaDTO;
@@ -14,16 +13,16 @@ import model.EditalDeMonitoria;
 
 public class EditalDeMonitoriaController {
 
-    private final EditalDeMonitoriaDAO editalDeMonitoriaDAO;
+    private final EditalDeMonitoriaDAOJPA editalDeMonitoriaDAOJPA;
 
     public EditalDeMonitoriaController() {
-        this.editalDeMonitoriaDAO = new EditalDeMonitoriaDAO();
+        this.editalDeMonitoriaDAOJPA = new EditalDeMonitoriaDAOJPA();
     }
     
     public boolean criarEdital(EditalDeMonitoriaDTO edital) {
     	if (!edital.getDataInicio().isAfter(edital.getDataFinal())) {
     		try {
-				editalDeMonitoriaDAO.salvar(edital);
+				editalDeMonitoriaDAOJPA.salvar(edital);
 				return true;
 			} catch (RuntimeException e) {
 				System.out.println(e.getMessage());
@@ -39,14 +38,9 @@ public class EditalDeMonitoriaController {
         EditalDeMonitoria edital = mapper.fromDTO(editalDTO);
 
         boolean inscrito = edital.inscrever(alunoDTO, disciplinaDTO);
-
         if (inscrito) {
-            this.editalDeMonitoriaDAO.atualizar(editalDTO);
-            DisciplinaDAOJPA daoDisciplina = new DisciplinaDAOJPA();
-            for(DisciplinaDTO dto: editalDTO.getDisciplinas()) {
-            	daoDisciplina.atualizar(disciplinaDTO);
-            	
-            }
+        	editalDTO = mapper.toDTO(edital);       
+            editalDeMonitoriaDAOJPA.atualizar(editalDTO);
         }
 
         return inscrito;
@@ -55,7 +49,7 @@ public class EditalDeMonitoriaController {
     public EditalDeMonitoriaDTO buscarEditalPorId(EditalDeMonitoriaDTO dto) {
         EditalDeMonitoriaDTO edital;
 		try {
-			edital = editalDeMonitoriaDAO.buscarPorId(dto);
+			edital = editalDeMonitoriaDAOJPA.buscarPorId(dto);
 			return edital;
 		} catch (Exception e) {
 			System.out.println("Erro ao buscar edital");
@@ -65,7 +59,7 @@ public class EditalDeMonitoriaController {
 
     public List<EditalDeMonitoriaDTO> listarTodosEditais() {
         try {
-			return editalDeMonitoriaDAO.listarTodos();
+			return editalDeMonitoriaDAOJPA.listarTodos();
 		} catch (ListaDeEditaisVaziaException e) {
 			System.out.print("Não há editais cadastrados");
 			return new ArrayList<>();
@@ -77,7 +71,7 @@ public class EditalDeMonitoriaController {
 
     public boolean atualizarEdital(EditalDeMonitoriaDTO edital) {
         if (!edital.getDataInicio().isAfter(edital.getDataFinal())) {
-        	editalDeMonitoriaDAO.atualizar(edital);
+        	editalDeMonitoriaDAOJPA.atualizar(edital);
             return true;
         }
         
@@ -86,7 +80,7 @@ public class EditalDeMonitoriaController {
 
     public boolean deletarEdital(EditalDeMonitoriaDTO dto) {
         try {
-			editalDeMonitoriaDAO.excluir(dto);
+			editalDeMonitoriaDAOJPA.excluir(dto);
 			return true;
 		} catch (RuntimeException e) {
 			e.printStackTrace();
@@ -107,6 +101,6 @@ public class EditalDeMonitoriaController {
     }
 
     public void fecharRecursos() {
-        editalDeMonitoriaDAO.fecharFactory();
+        editalDeMonitoriaDAOJPA.fecharFactory();
     }
 }

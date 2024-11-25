@@ -17,7 +17,7 @@ import javax.persistence.ManyToMany;
 public class Disciplina {
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	
 	@Column(nullable = false)
@@ -26,10 +26,10 @@ public class Disciplina {
 	@Column(name = "quantidade_vagas", nullable = false)
 	private int quantidadeDeVagas;
 	
-	@ManyToMany(cascade = CascadeType.ALL, targetEntity = model.Aluno.class)
+	@ManyToMany(cascade = CascadeType.MERGE)
 	@JoinTable(name = "inscricoes",
-				joinColumns = @JoinColumn(name = "disciplina"),
-				inverseJoinColumns = @JoinColumn(name = "aluno"))
+				joinColumns = @JoinColumn(name = "disciplina", updatable = true, insertable = true),
+				inverseJoinColumns = @JoinColumn(name = "aluno", updatable = true, insertable = true))
 	private List<Aluno> listaDeAlunosInscritos = new ArrayList<>();
 
 	public Disciplina() {
@@ -40,6 +40,8 @@ public class Disciplina {
 		this.quantidadeDeVagas = quantidadeDeVagas;
 		this.listaDeAlunosInscritos = listaDeAlunosInscritos;
 	}
+	
+	
 	
 	public String getNome() {
 		return nome;
