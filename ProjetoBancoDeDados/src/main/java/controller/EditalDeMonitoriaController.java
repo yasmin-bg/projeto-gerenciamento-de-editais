@@ -40,12 +40,8 @@ public class EditalDeMonitoriaController {
         boolean inscrito = edital.inscrever(alunoDTO, disciplinaDTO);
 
         if (inscrito) {
-            this.editalDeMonitoriaDAOJPA.atualizar(editalDTO);
-            DisciplinaDAOJPA daoDisciplina = new DisciplinaDAOJPA();
-            for(DisciplinaDTO dto: editalDTO.getDisciplinas()) {
-            	daoDisciplina.atualizar(disciplinaDTO);
-            	
-            }
+        	editalDTO = mapper.toDTO(edital);
+            editalDeMonitoriaDAOJPA.atualizar(editalDTO);
         }
 
         return inscrito;

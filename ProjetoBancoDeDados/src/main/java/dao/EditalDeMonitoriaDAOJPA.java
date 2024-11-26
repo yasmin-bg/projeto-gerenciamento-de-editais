@@ -46,18 +46,10 @@ public class EditalDeMonitoriaDAOJPA implements EditalDeMonitoriaDAO {
     	try {
     		em.getTransaction().begin();
             
-            EditalDeMonitoria edital = em.find(EditalDeMonitoria.class, dto.getId());
-            
-            if(edital != null) {
-            	MapperEditalDeMonitoria mapper = new MapperEditalDeMonitoria();
-            	edital = mapper.fromDTO(dto);
-            	em.merge(edital);
-            	
-            	for(DisciplinaDTO disciplina: dto.getDisciplinas()) {
-            		DisciplinaDAOJPA daoDisciplina = new DisciplinaDAOJPA();
-            		daoDisciplina.atualizar(disciplina);
-            	}
-            }	
+            MapperEditalDeMonitoria mapper = new MapperEditalDeMonitoria();
+            EditalDeMonitoria edital = mapper.fromDTO(dto);	
+            em.merge(edital);
+            em.getTransaction().commit();	
             
     	} catch (Exception e) {
             em.getTransaction().rollback();
