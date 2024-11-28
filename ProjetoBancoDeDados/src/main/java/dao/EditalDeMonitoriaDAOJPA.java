@@ -8,7 +8,6 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.TypedQuery;
 
-import dto.DisciplinaDTO;
 import dto.EditalDeMonitoriaDTO;
 import exception.ListaDeEditaisVaziaException;
 import mappers.MapperEditalDeMonitoria;

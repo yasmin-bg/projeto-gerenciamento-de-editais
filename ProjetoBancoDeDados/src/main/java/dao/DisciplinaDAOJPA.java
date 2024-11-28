@@ -50,8 +50,7 @@ public class DisciplinaDAOJPA implements DisciplinaDAO {
     	        	MapperDisciplina mapper = new MapperDisciplina();
     	        	disciplina = mapper.fromDTO(dto);
     	        	em.merge(disciplina);        	
-    	        }
-    	        
+    	        }   
     	    }catch(Exception e) {
     	    	em.getTransaction().rollback();
     	    	throw e;

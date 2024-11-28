@@ -2,7 +2,7 @@ package controller;
 
 import java.util.ArrayList;
 import java.util.List;
-import dao.DisciplinaDAOJPA;
+
 import dao.EditalDeMonitoriaDAOJPA;
 import dto.AlunoDTO;
 import dto.DisciplinaDTO;
@@ -38,10 +38,9 @@ public class EditalDeMonitoriaController {
         EditalDeMonitoria edital = mapper.fromDTO(editalDTO);
 
         boolean inscrito = edital.inscrever(alunoDTO, disciplinaDTO);
-
         if (inscrito) {
         	editalDTO = mapper.toDTO(edital);
-            editalDeMonitoriaDAOJPA.atualizar(editalDTO);
+          editalDeMonitoriaDAOJPA.atualizar(editalDTO);
         }
 
         return inscrito;
