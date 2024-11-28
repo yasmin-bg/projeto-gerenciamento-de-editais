@@ -65,7 +65,7 @@ public class Main {
  				alunoDTO = alunoController.buscarAlunoPorMatricula(alunoDTO);
  				
  				if(alunoDTO != null) {
- 					System.out.println("Nome: " + alunoDTO.getNome() +"\nMatrícula: "+ alunoDTO.getMatricula() +"\nEmail: "+ alunoDTO.getEmail());					
+ 					System.out.println("Nome: " + alunoDTO.getNome() +"\nEmail: "+ alunoDTO.getEmail());					
  				}
  				break;
  			
